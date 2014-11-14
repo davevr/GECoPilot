@@ -11,6 +11,7 @@ namespace GECoPilot
 
 
             var nav = new NavigationPage(new SummaryPage());
+            nav.Title = "GE Co-pilot";
                
 
 

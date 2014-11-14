@@ -6,7 +6,7 @@
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProjectGuid>{2D75FB71-1B3E-489C-84DE-1D23966ACB88}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>formstestportable</RootNamespace>
+    <RootNamespace>GECoPilot</RootNamespace>
     <AssemblyName>formstestportable</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
@@ -42,6 +42,11 @@
     <Compile Include="SelectServerPage.xaml.cs">
       <DependentUpon>SelectServerPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GEAPI\GEState.cs" />
+    <Compile Include="GEAPI\GEPlanet.cs" />
+    <Compile Include="GEAPI\GEUser.cs" />
+    <Compile Include="GEAPI\GEFleet.cs" />
+    <Compile Include="GEAPI\GEStatusObject.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.1.2.3.6257\build\portable-win+net45+wp80+MonoAndroid10+MonoTouch10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.1.2.3.6257\build\portable-win+net45+wp80+MonoAndroid10+MonoTouch10\Xamarin.Forms.targets')" />

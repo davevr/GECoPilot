@@ -65,9 +65,9 @@ namespace GECoPilot
         private  string _token = null;
         private  bool _isSignedIn = false;
         private  string url = "http://ge.seazonegames.com/";
-        private CookieContainer cookie = null;
         private bool _serverSelected = false;
         private State _serverState = null;
+        private System.Net.Http.HttpClient client = null;
 
         private static GEServer _singleton = null;
 
@@ -97,7 +97,12 @@ namespace GECoPilot
 
         private void InitClient()
         {
-            cookie = new CookieContainer();
+            HttpClientHandler handler = new HttpClientHandler();
+            handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+            handler.CookieContainer = new CookieContainer();
+
+            client = new System.Net.Http.HttpClient(handler);
+            client.BaseAddress = new Uri(url);
         }
 
         private void MakeAPICall(string paramStr, string_callback callback)
@@ -106,11 +111,6 @@ namespace GECoPilot
             if (!String.IsNullOrEmpty(_token))
                 fullURL += "&token=" + _token;
 
-            HttpClientHandler handler = new HttpClientHandler();
-            handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-            var client = new System.Net.Http.HttpClient(handler);
-            client.BaseAddress = new Uri(url);
             client.PostAsync(fullURL, null).ContinueWith((theTask) =>
                 {
                     HttpResponseMessage resp = theTask.Result;
@@ -190,7 +190,7 @@ namespace GECoPilot
                         if (callback != null)
                             callback("ok");
                     }
-                    catch (Exception exp)
+                    catch (Exception)
                     {
                         if (callback != null)
                             callback("failed");
@@ -378,6 +378,7 @@ namespace GECoPilot
         public int CRYSTAL_BASIC_INCOME { get; set; }
         public int DEUTERIUM_BASIC_INCOME { get; set; }
         public int ENERGY_BASIC_INCOME { get; set; }
+        public GEPlanet moon { get; set; }
     }
 
     public class GEFleet
@@ -437,6 +438,7 @@ namespace GECoPilot
         public string s { get; set; }
         public string p { get; set; }
         public string planet_type { get; set; }
+        public GEPlanetSummary moon {get; set;}
     }
 
 
@@ -448,9 +450,115 @@ namespace GECoPilot
         public List<GEPlanet> planetList { get; set; }
         public List<GEPlanetSummary> planetSummaryList { get; set; }
         public List<GEFleet> fleetList { get; set; }
-        public JObject fleet { get; set; }
+        public JToken fleet { get; set; }
         public string global_notification { get; set; }
         public string global_notification_type { get; set; }
+
+        public string SummaryText
+        {
+            get
+            {
+                string summary = "Your planets have a total of ";
+                summary += TotalMetal.ToString("#,#") + " metal, ";
+                summary += TotalCrystal.ToString("#,#") + " crystal, and ";
+                summary += TotalDeuterium.ToString("#,#") + " deuterium.  \n";
+                summary += "They are generating ";
+                summary += HourlyMetal.ToString("#,#") + " metal, ";
+                summary += HourlyCrystal.ToString("#,#") + " crystal, and ";
+                summary += HourlyDeuterium.ToString("#,#") + " deuterium per hour.";
+                return summary;
+            }
+        }
+
+        public int TotalMetal
+        {
+            get
+            {
+                double total = 0;
+
+                foreach(GEPlanet curPlanet in planetList)
+                {
+                    total += curPlanet.metal;
+                }
+
+                return (int)total;
+            }
+        }
+
+        public int TotalCrystal
+        {
+            get
+            {
+                double total = 0;
+
+                foreach(GEPlanet curPlanet in planetList)
+                {
+                    total += curPlanet.crystal;
+                }
+
+                return (int)total;
+            }
+        }
+
+        public int TotalDeuterium
+        {
+            get
+            {
+                double total = 0;
+
+                foreach(GEPlanet curPlanet in planetList)
+                {
+                    total += curPlanet.deuterium;
+                }
+
+                return (int)total;
+            }
+        }
+
+        public int HourlyMetal
+        {
+            get
+            {
+                double total = 0;
+
+                foreach(GEPlanet curPlanet in planetList)
+                {
+                    total += curPlanet.metal_perhour;
+                }
+
+                return (int)total;
+            }
+        }
+
+        public int HourlyCrystal
+        {
+            get
+            {
+                double total = 0;
+
+                foreach(GEPlanet curPlanet in planetList)
+                {
+                    total += curPlanet.crystal_perhour;
+                }
+
+                return (int)total;
+            }
+        }
+
+        public int HourlyDeuterium
+        {
+            get
+            {
+                double total = 0;
+
+                foreach(GEPlanet curPlanet in planetList)
+                {
+                    total += curPlanet.deuterium_perhour;
+                }
+
+                return (int)total;
+            }
+        }
     }
 
     public class GEStatusObject
@@ -468,33 +576,61 @@ namespace GECoPilot
         {
             // to do:  convert the JObject members into actual objects.
             state.planetList = new List<GEPlanet>();
+            List<GEPlanet> moonList = new List<GEPlanet>();
             foreach (JToken curObj in state.planets.Children())
             {
                 JToken subObj = curObj.First;
                 GEPlanet newPlanet = subObj.ToObject<GEPlanet>();
 
-                state.planetList.Add(newPlanet);
+                if (newPlanet.planet_type == "3")
+                    moonList.Add(newPlanet);
+                else
+                    state.planetList.Add(newPlanet);
+            }
+
+            if (moonList.Count > 0)
+            {
+                foreach (GEPlanet curMoon in moonList)
+                {
+                    state.planetList.Find(planet => planet.moon_id == curMoon.id).moon = curMoon;
+                }
             }
 
             state.planetSummaryList = new List<GEPlanetSummary>();
+            List<GEPlanetSummary> moonSummaryList = new List<GEPlanetSummary>();
+
             foreach (JToken curObj in state.planets_sorted.Children())
             {
                 JToken subObj = curObj.First;
                 GEPlanetSummary newPlanet = subObj.ToObject<GEPlanetSummary>();
 
-                state.planetSummaryList.Add(newPlanet);
+                if (newPlanet.planet_type == "3")
+                    moonSummaryList.Add(newPlanet);
+                else
+                    state.planetSummaryList.Add(newPlanet);
+            }
+
+            if (moonSummaryList.Count > 0)
+            {
+                foreach (GEPlanetSummary curMoon in moonSummaryList)
+                {
+                    string planetId = state.planetList.Find(planet => planet.moon_id == curMoon.id).id;
+                    state.planetSummaryList.Find(planet => planet.id == planetId).moon = curMoon;
+                }
             }
 
             state.fleetList = new List<GEFleet>();
             if (!(state.fleet == null))
             {
-               
-                foreach (JToken curObj in state.fleet.Children())
+                if (state.fleet is JObject)
                 {
-                    JToken subObj = curObj.First;
-                    GEFleet newFleet = subObj.ToObject<GEFleet>();
+                    foreach (JToken curObj in state.fleet.Children())
+                    {
+                        JToken subObj = curObj.First;
+                        GEFleet newFleet = subObj.ToObject<GEFleet>();
 
-                    state.fleetList.Add(newFleet);
+                        state.fleetList.Add(newFleet);
+                    }
                 }
             }
 

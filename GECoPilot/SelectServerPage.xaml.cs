@@ -7,6 +7,7 @@ namespace GECoPilot
 	public partial class SelectServerPage : ContentPage
 	{	
         private ServerInfo[] savedServerList;
+        public SummaryPage ReturnPage { get; set; }
 
 		public SelectServerPage ()
 		{
@@ -30,6 +31,7 @@ namespace GECoPilot
                             Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                                 {
                                     Navigation.PopModalAsync();
+                                    ReturnPage.UpdateBindings();
                                 });
                         });
 

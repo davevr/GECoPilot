@@ -6,6 +6,8 @@ namespace GECoPilot
 {	
 	public partial class Login : ContentPage
 	{	
+        public SummaryPage ReturnPage { get; set; }
+
 		public Login ()
 		{
 			InitializeComponent ();
@@ -19,6 +21,7 @@ namespace GECoPilot
                                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                                     {
                                         Navigation.PopModalAsync();
+                                        ReturnPage.SetServerStatus();
                                     });
                         else
                             DisplayAlert("Error", "Your credentials didn't work.  Please try again.", "ok");
