@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using System.Globalization;
 
 namespace GECoPilot
 {
@@ -17,6 +18,21 @@ namespace GECoPilot
 
         public void Normalize()
         {
+            int GMT = 0;
+            string time = server_time;
+            if (time.IndexOf("EST") > -1)
+            {
+                time = time.Substring(0, time.Length - 4);
+                GMT = 5;
+            }
+            else if (time.IndexOf("EDT") > -1)
+            {
+                time = time.Substring(0, time.Length - 4);
+                GMT = 4;
+            }
+
+            state.UpdateTime = DateTime.Parse(time).AddHours(GMT);
+
             state.planetList = new List<GEPlanet>();
             List<GEPlanet> moonList = new List<GEPlanet>();
             foreach (JToken curObj in state.planets.Children())

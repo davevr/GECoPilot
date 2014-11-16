@@ -98,6 +98,50 @@ namespace GECoPilot
         public int DEUTERIUM_BASIC_INCOME { get; set; }
         public int ENERGY_BASIC_INCOME { get; set; }
         public GEPlanet moon { get; set; }
+
+        // computed
+
+        public double CurrentMetal
+        {
+            get
+            {
+                DateTime startTime = GEServer.Instance.ServerState.LocalUpdateTime;
+                TimeSpan elapsedTime = DateTime.Now - startTime;
+                double hours = elapsedTime.TotalHours;
+                double newMetal = metal_perhour * hours;
+
+                double totalMetal = metal + newMetal;
+                return totalMetal;
+            }
+        }
+
+        public double CurrentCrystal
+        {
+            get
+            {
+                DateTime startTime = GEServer.Instance.ServerState.LocalUpdateTime;
+                TimeSpan elapsedTime = DateTime.Now - startTime;
+                double hours = elapsedTime.TotalHours;
+                double newCrystal = crystal_perhour * hours;
+
+                double totalCrystal = crystal + newCrystal;
+                return totalCrystal;
+            }
+        }
+
+        public double CurrentDeuterium
+        {
+            get
+            {
+                DateTime startTime = GEServer.Instance.ServerState.LocalUpdateTime;
+                TimeSpan elapsedTime = DateTime.Now - startTime;
+                double hours = elapsedTime.TotalHours;
+                double newDeuterium = deuterium_perhour * hours;
+
+                double totalDeuterium = metal + newDeuterium;
+                return totalDeuterium;
+            }
+        }
     }
 
 

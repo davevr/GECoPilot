@@ -15,20 +15,75 @@ namespace GECoPilot
         public JToken fleet { get; set; }
         public string global_notification { get; set; }
         public string global_notification_type { get; set; }
+        public DateTime UpdateTime { get; set; }
+
+
+        public DateTime LocalUpdateTime
+        { 
+            get
+            {
+                return UpdateTime.ToLocalTime();
+            }
+        }
 
         public string SummaryText
         {
             get
             {
                 string summary = "Your planets have a total of ";
-                summary += TotalMetal.ToString("#,#") + " metal, ";
-                summary += TotalCrystal.ToString("#,#") + " crystal, and ";
-                summary += TotalDeuterium.ToString("#,#") + " deuterium.  \n";
+                summary += TotalCurrentMetal.ToString("#,#") + " metal, ";
+                summary += TotalCurrentCrystal.ToString("#,#") + " crystal, and ";
+                summary += TotalCurrentDeuterium.ToString("#,#") + " deuterium.  \n";
                 summary += "They are generating ";
                 summary += HourlyMetal.ToString("#,#") + " metal, ";
                 summary += HourlyCrystal.ToString("#,#") + " crystal, and ";
                 summary += HourlyDeuterium.ToString("#,#") + " deuterium per hour.";
                 return summary;
+            }
+        }
+
+        public int TotalCurrentMetal
+        {
+            get
+            {
+                double total = 0;
+
+                foreach(GEPlanet curPlanet in planetList)
+                {
+                    total += curPlanet.CurrentMetal;
+                }
+
+                return (int)total;
+            }
+        }
+
+        public int TotalCurrentCrystal
+        {
+            get
+            {
+                double total = 0;
+
+                foreach(GEPlanet curPlanet in planetList)
+                {
+                    total += curPlanet.CurrentCrystal;
+                }
+
+                return (int)total;
+            }
+        }
+
+        public int TotalCurrentDeuterium
+        {
+            get
+            {
+                double total = 0;
+
+                foreach(GEPlanet curPlanet in planetList)
+                {
+                    total += curPlanet.CurrentDeuterium;
+                }
+
+                return (int)total;
             }
         }
 

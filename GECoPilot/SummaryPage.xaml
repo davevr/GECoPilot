@@ -6,6 +6,7 @@
 				<RowDefinition Height="Auto"></RowDefinition>
 				<RowDefinition Height="*"></RowDefinition>
 				<RowDefinition Height="Auto"></RowDefinition>
+				<RowDefinition Height="Auto"></RowDefinition>
 			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*"></ColumnDefinition>
@@ -14,8 +15,8 @@
 			<Grid.Children>
 				<Label Grid.Row="0" Grid.Column="0" Text="Your Planets" HorizontalOptions="CenterAndExpand" VerticalOptions="Start"></Label>
 				<ListView Grid.Row="1" Grid.Column="0" x:Name="PlanetListView" RowHeight="40" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"></ListView>
-				<Label x:Name="SummaryArea" Grid.Row="2" Grid.Column="0" Text="Summary" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"></Label>
-				
+				<Label Font="Small" x:Name="SummaryArea" Grid.Row="2" Grid.Column="0" Text="Summary" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"></Label>
+				<Button x:Name="RefreshBtn" Grid.Row="3" Grid.Column="0" Text="Refresh" HorizontalOptions="Center" VerticalOptions="CenterAndExpand"></Button>
 			</Grid.Children>
 
 		</Grid>
