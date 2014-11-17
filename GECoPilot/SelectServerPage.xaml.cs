@@ -28,10 +28,15 @@ namespace GECoPilot
 
                     GEServer.Instance.SetServer(curItem, (result) => 
                         {
+                            AppSettings.Instance.Universe = curItem;
+                            AppSettings.SaveSettings();
                             Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                                 {
-                                    Navigation.PopModalAsync();
-                                    ReturnPage.UpdateBindings();
+                                    Navigation.PopModalAsync().ContinueWith((Page) =>
+                                    {
+                                        ReturnPage.UpdateBindings();
+                                    });
+                                   
                                 });
                         });
 

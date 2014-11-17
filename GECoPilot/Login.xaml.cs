@@ -18,11 +18,15 @@ namespace GECoPilot
                 GEServer.Instance.Login(AddrField.Text, PasswordField.Text, (result) =>
                     {
                         if (result == "")
-                                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
-                                    {
-                                        Navigation.PopModalAsync();
-                                        ReturnPage.SetServerStatus();
-                                    });
+                        {
+                            AppSettings.Instance.Username = AddrField.Text;
+                            AppSettings.Instance.Password = PasswordField.Text;
+                            Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                                {
+                                    Navigation.PopModalAsync();
+                                    ReturnPage.SetServerStatus();
+                                });
+                        }
                         else
                             DisplayAlert("Error", "Your credentials didn't work.  Please try again.", "ok");
                     });

@@ -7,6 +7,7 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using GECoPilot.WinPhone.Resources;
+using System.IO.IsolatedStorage;
 
 namespace GECoPilot.WinPhone
 {
@@ -32,6 +33,8 @@ namespace GECoPilot.WinPhone
             // Phone-specific initialization
             InitializePhoneApplication();
 
+
+
             // Language display initialization
             InitializeLanguage();
 
@@ -56,6 +59,7 @@ namespace GECoPilot.WinPhone
             }
 
         }
+
 
         // Code to execute when the application is launching (eg, from Start)
         // This code will not execute when the application is reactivated

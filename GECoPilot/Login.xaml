@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="GECoPilot.Login">
 	<ContentPage.Content>
-<StackLayout Orientation="Vertical" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-		<StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
-			<Label Text="email addr:" HorizontalOptions="CenterAndExpand" />
-			<Entry WidthRequest="80" HorizontalOptions="CenterAndExpand" x:Name="AddrField"></Entry>
+<StackLayout Orientation="Vertical" VerticalOptions="CenterAndExpand" HorizontalOptions="Fill" Padding="8, 0, 8, 0">
+		<StackLayout Orientation="Vertical" VerticalOptions="CenterAndExpand" HorizontalOptions="Fill">
+			<Label Text="email addr:" Font="Micro" HorizontalOptions="Start" />
+			<Entry  HorizontalOptions="Fill" x:Name="AddrField"></Entry>
 		</StackLayout>
-		<StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand">
-			<Label Text="password:" HorizontalOptions="CenterAndExpand">password:</Label>
-			<Entry  WidthRequest="80" HorizontalOptions="CenterAndExpand" x:Name="PasswordField"/>
+		<StackLayout Orientation="Vertical" VerticalOptions="CenterAndExpand" HorizontalOptions="Fill">
+			<Label Text="password:" Font="Micro" HorizontalOptions="Start">password:</Label>
+			<Entry  HorizontalOptions="Fill" x:Name="PasswordField" IsPassword="true"/>
 		</StackLayout>
 		<Button Text="Sign in" x:Name="DoLogin"></Button>
 	</StackLayout>
