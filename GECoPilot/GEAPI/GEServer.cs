@@ -180,9 +180,11 @@ namespace GECoPilot
             queryString += "&action=chooseserver";
             queryString += "&server=" + serverName;
 
-            MakeAPICall(queryString, (content) =>
+            try
+            {
+                MakeAPICall(queryString, (content) =>
                 {
-                    try 
+                    try
                     {
                         GEStatusObject response = Newtonsoft.Json.JsonConvert.DeserializeObject<GEStatusObject>(content);
                         response.Normalize();
@@ -196,6 +198,12 @@ namespace GECoPilot
                             callback("failed");
                     }
                 });
+            }
+            catch (Exception exp)
+            {
+                // to do:  do something
+            }
+            
         }
 
         public void Refresh(string_callback callback)
