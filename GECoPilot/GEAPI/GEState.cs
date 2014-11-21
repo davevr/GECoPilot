@@ -9,7 +9,7 @@ namespace GECoPilot
         public GEUser user { get; set; }
         public JObject planets { get; set; }
         public JObject planets_sorted { get; set; }
-        public List<GEPlanet> planetList { get; set; }
+        public GEPlanetList planetList { get; set; }
         public List<GEPlanetSummary> planetSummaryList { get; set; }
         public List<GEFleet> fleetList { get; set; }
         public JToken fleet { get; set; }

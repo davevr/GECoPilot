@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Xamarin.Forms;
 using System.Threading;
-
+using System.Globalization;
 
 namespace GECoPilot
 {	
@@ -16,14 +16,18 @@ namespace GECoPilot
 
             AppSettings.LoadSettings();
 
-            PlanetListView.ItemTemplate = new DataTemplate(typeof(TextCell));
-            PlanetListView.ItemTemplate.SetBinding(TextCell.TextProperty, "name");
+           // PlanetListView.ItemTemplate = new DataTemplate(typeof(TextCell));
+            //PlanetListView.ItemTemplate.SetBinding(TextCell.TextProperty, "name");
 
             RefreshBtn.Clicked += (object sender, EventArgs e) =>
                 {
                     GEServer.Instance.Refresh((theStr) => 
                         {
-                            UpdateBindings();
+                            Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                                {
+                                    UpdateBindings();
+                                }
+                            );
                         });
                 };
 
@@ -100,15 +104,47 @@ namespace GECoPilot
 
         public void UpdateBindings()
         {
-            PlanetListView.ItemsSource = GEServer.Instance.ServerState.planetSummaryList;
-            SummaryArea.Text = GEServer.Instance.ServerState.SummaryText;
+            //PlanetListView.ItemsSource = GEServer.Instance.ServerState.planetList;
+            PlanetListView.ItemsSource = GEServer.Instance.ServerState.planetList;
+            //PlanetListView.ItemsSource = GEServer.Instance.ServerState.planetList;
+            //SummaryArea.Text = GEServer.Instance.ServerState.SummaryText;
         }
 
         public void RefreshSummary()
         {
             if (GEServer.Instance.ServerState != null)
+            {
+                GEServer.Instance.ServerState.planetList.UpdateForTime();
                 SummaryArea.Text = GEServer.Instance.ServerState.SummaryText;
+            }
         }
+
+
 	}
+
+    class DoubleToIntConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType,
+            object parameter, CultureInfo culture)
+        {
+            double multiplier;
+
+            if (!Double.TryParse(parameter as string, out multiplier))
+                multiplier = 1;
+
+            return (int)Math.Round(multiplier * (double)value);
+        }
+
+        public object ConvertBack(object value, Type targetType,
+            object parameter, CultureInfo culture)
+        {
+            double divider;
+
+            if (!Double.TryParse(parameter as string, out divider))
+                divider = 1;
+
+            return ((double)(int)value) / divider;
+        }
+    }
 }
 

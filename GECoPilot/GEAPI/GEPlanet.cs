@@ -1,9 +1,43 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Collections.Generic;
 
 namespace GECoPilot
 {
-    public class GEPlanet
+    public class GEPlanet : INotifyPropertyChanged
     {
+        // boiler-plate
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+        protected bool SetField<T>(ref T field, T value, string propertyName)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
+
+        public void UpdateForTime()
+        {
+            DateTime curTime = DateTime.Now;
+            double hours = (_lastUpdateTime - curTime).TotalHours;
+            metal += metal_perhour * hours;
+            crystal += crystal_perhour * hours;
+            deuterium += deuterium_perhour * hours;
+            _lastUpdateTime = curTime;
+        }
+
+        private double _metal;
+        private double _crystal;
+        private double _deuterium;
+
+        private DateTime _lastUpdateTime = DateTime.Now;
+
         public string id { get; set; }
         public string name { get; set; }
         public string user_id { get; set; }
@@ -29,13 +63,39 @@ namespace GECoPilot
         public string field_max { get; set; }
         public string temp_min { get; set; }
         public string temp_max { get; set; }
-        public double metal { get; set; }
+        public double metal 
+        { 
+            get { return _metal; } 
+            set 
+            { 
+                SetField<double>(ref _metal, value, "metal");
+            }
+        }
+
+        public double crystal 
+        { 
+            get { return _crystal; } 
+            set 
+            { 
+                SetField<double>(ref _crystal, value, "crystal");
+            }
+        }
+
+        public double deuterium 
+        { 
+            get { return _deuterium; } 
+            set 
+            { 
+                SetField<double>(ref _deuterium, value, "deuterium");
+            }
+        }
+
         public int metal_perhour { get; set; }
         public int metal_max { get; set; }
-        public double crystal { get; set; }
+        //public double crystal { get; set; }
         public int crystal_perhour { get; set; }
         public int crystal_max { get; set; }
-        public double deuterium { get; set; }
+        //public double deuterium { get; set; }
         public int deuterium_perhour { get; set; }
         public int deuterium_max { get; set; }
         public int energy_used { get; set; }
@@ -140,6 +200,17 @@ namespace GECoPilot
 
                 double totalDeuterium = metal + newDeuterium;
                 return totalDeuterium;
+            }
+        }
+    }
+
+    public class GEPlanetList : ObservableCollection<GEPlanet> 
+    {
+        public void UpdateForTime()
+        {
+            foreach (GEPlanet curPlanet in this)
+            {
+                curPlanet.UpdateForTime();
             }
         }
     }

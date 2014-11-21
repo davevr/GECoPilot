@@ -33,7 +33,7 @@ namespace GECoPilot
 
             state.UpdateTime = DateTime.Parse(time).AddHours(GMT);
 
-            state.planetList = new List<GEPlanet>();
+            state.planetList = new GEPlanetList();
             List<GEPlanet> moonList = new List<GEPlanet>();
             foreach (JToken curObj in state.planets.Children())
             {
@@ -50,7 +50,14 @@ namespace GECoPilot
             {
                 foreach (GEPlanet curMoon in moonList)
                 {
-                    state.planetList.Find(planet => planet.moon_id == curMoon.id).moon = curMoon;
+                    foreach (GEPlanet curPlanet in state.planetList)
+                    {
+                        if (curPlanet.moon_id == curMoon.id)
+                        {
+                            curPlanet.moon = curMoon;
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -72,8 +79,14 @@ namespace GECoPilot
             {
                 foreach (GEPlanetSummary curMoon in moonSummaryList)
                 {
-                    string planetId = state.planetList.Find(planet => planet.moon_id == curMoon.id).id;
-                    state.planetSummaryList.Find(planet => planet.id == planetId).moon = curMoon;
+                    foreach (GEPlanet curPlanet in state.planetList)
+                    {
+                        if (curPlanet.moon_id == curMoon.id)
+                        {
+                            state.planetSummaryList.Find(planet => planet.id == curPlanet.id).moon = curMoon;
+                            break;
+                        }
+                    }
                 }
             }
 
