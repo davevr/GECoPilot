@@ -41,7 +41,8 @@ namespace GECoPilot
                     if (!_timerRunning)
                     {
                         _timerRunning = true;
-                        Xamarin.Forms.Device.StartTimer(new TimeSpan(0, 0, 1), () =>
+                        TimeSpan duration = new TimeSpan(0,0,0,0,100);
+                        Xamarin.Forms.Device.StartTimer(duration, () =>
                         {
                             Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                             {

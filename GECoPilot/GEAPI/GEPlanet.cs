@@ -25,7 +25,7 @@ namespace GECoPilot
         public void UpdateForTime()
         {
             DateTime curTime = DateTime.Now;
-            double hours = (_lastUpdateTime - curTime).TotalHours;
+            double hours = (curTime - _lastUpdateTime).TotalHours;
             metal += metal_perhour * hours;
             crystal += crystal_perhour * hours;
             deuterium += deuterium_perhour * hours;
