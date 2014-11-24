@@ -28,7 +28,7 @@ x:Class="GECoPilot.SummaryPage">
 			</Grid.ColumnDefinitions>
 			<Grid.Children>
 				<Label Grid.Row="0" Grid.Column="0" Text="Your Planets" HorizontalOptions="CenterAndExpand" VerticalOptions="Start"></Label>
-				<ListView Grid.Row="1" Grid.Column="0" x:Name="PlanetListView" RowHeight="50" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+				<ListView Grid.Row="1" Grid.Column="0" x:Name="PlanetListView" RowHeight="60" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
 					<ListView.ItemTemplate>
 				      <DataTemplate>
 				        <ViewCell>

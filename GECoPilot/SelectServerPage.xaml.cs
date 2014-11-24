@@ -34,7 +34,10 @@ namespace GECoPilot
                                 {
                                     Navigation.PopModalAsync().ContinueWith((Page) =>
                                     {
-                                        ReturnPage.UpdateBindings();
+                                        Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                                       {
+                                           ReturnPage.UpdateBindings();
+                                       });
                                     });
                                    
                                 });
