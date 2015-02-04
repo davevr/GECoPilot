@@ -31,6 +31,11 @@ namespace GECoPilot
                         });
                 };
 
+            ScanBtn.Clicked += (object sender, EventArgs e) =>
+                {
+                    Navigation.PushAsync(new ScanGalaxyPage());
+                };
+
             Appearing += (object sender, EventArgs e) => 
                 {
                     if (!GEServer.Instance.IsSignedIn)

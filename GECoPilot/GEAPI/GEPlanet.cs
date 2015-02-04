@@ -165,12 +165,20 @@ namespace GECoPilot
         {
             get
             {
+                
                 DateTime startTime = GEServer.Instance.ServerState.LocalUpdateTime;
                 TimeSpan elapsedTime = DateTime.Now - startTime;
                 double hours = elapsedTime.TotalHours;
                 double newMetal = metal_perhour * hours;
 
                 double totalMetal = metal + newMetal;
+                if (totalMetal > metal_max)
+                {
+                    if (metal > metal_max)
+                        return metal;
+                    else
+                        return metal_max;
+                }
                 return totalMetal;
             }
         }
@@ -185,6 +193,13 @@ namespace GECoPilot
                 double newCrystal = crystal_perhour * hours;
 
                 double totalCrystal = crystal + newCrystal;
+                if (totalCrystal > crystal_max)
+                {
+                    if (crystal > crystal_max)
+                        return crystal;
+                    else
+                        return crystal_max;
+                }
                 return totalCrystal;
             }
         }
@@ -198,7 +213,14 @@ namespace GECoPilot
                 double hours = elapsedTime.TotalHours;
                 double newDeuterium = deuterium_perhour * hours;
 
-                double totalDeuterium = metal + newDeuterium;
+                double totalDeuterium = deuterium + newDeuterium;
+                if (totalDeuterium > deuterium_max)
+                {
+                    if (deuterium > deuterium_max)
+                        return deuterium;
+                    else
+                        return deuterium_max;
+                }
                 return totalDeuterium;
             }
         }

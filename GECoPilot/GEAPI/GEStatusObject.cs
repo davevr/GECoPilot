@@ -5,8 +5,11 @@ using System.Globalization;
 
 namespace GECoPilot
 {
+   
+    
     public class GEStatusObject
     {
+        public GalaxyShowList galaxyshow  {get; set;}
         public List<object> authchooseserver { get; set; }
         public int status { get; set; }
         public int timestamp { get; set; }
@@ -103,6 +106,11 @@ namespace GECoPilot
                         state.fleetList.Add(newFleet);
                     }
                 }
+            }
+
+            if (galaxyshow != null)
+            {
+                galaxyshow.Normalize();
             }
 
 

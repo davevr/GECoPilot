@@ -11,6 +11,7 @@ namespace GECoPilot
 {
     public delegate void string_callback(String theResult);
     public delegate void bool_callback(bool theResult);
+    public delegate void GalaxyList_callback(GalaxyList theResult);
 
 
     public class ServerResponse
@@ -202,6 +203,8 @@ namespace GECoPilot
             catch (Exception exp)
             {
                 // to do:  do something
+                if (callback != null)
+                    callback("failed");
             }
             
         }
@@ -227,6 +230,38 @@ namespace GECoPilot
                             callback("failed");
                     }
                 });
+        }
+
+        public void ScanGalaxy(int galaxy, int system, GalaxyList_callback callback)
+        {
+            string queryString = "";
+            queryString += "object=galaxy";
+            queryString += "&action=show";
+            queryString += "&g=" + galaxy.ToString();
+            queryString += "&s=" + system.ToString();
+            queryString += "live=1";
+
+            MakeAPICall(queryString, (content) =>
+            {
+                try
+                {
+                    GEStatusObject response = Newtonsoft.Json.JsonConvert.DeserializeObject<GEStatusObject>(content);
+                    response.Normalize();
+                    _serverState = response.state;
+                    if (callback != null)
+                    {
+                        if (response.galaxyshow != null)
+                            callback(response.galaxyshow.PlanetList);
+                        else
+                            callback(null);
+                    }
+                }
+                catch (Exception)
+                {
+                    if (callback != null)
+                        callback(null);
+                }
+            });
         }
 
 

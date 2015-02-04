@@ -64,6 +64,7 @@ x:Class="GECoPilot.SummaryPage">
 
 				<Label Font="Small" x:Name="SummaryArea" Grid.Row="2" Grid.Column="0" Text="Summary" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"></Label>
 				<Button x:Name="RefreshBtn" Grid.Row="3" Grid.Column="0" Text="Refresh" HorizontalOptions="Center" VerticalOptions="CenterAndExpand"></Button>
+      				<Button x:Name="ScanBtn" Grid.Row="3" Grid.Column="1" Text="Scan" HorizontalOptions="Center" VerticalOptions="CenterAndExpand"></Button>
 			</Grid.Children>
 
 		</Grid>
